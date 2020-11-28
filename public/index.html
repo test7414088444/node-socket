@@ -37,6 +37,7 @@
     </style>
   </head>
   <body>
+    <span id='con'>Connected</span>
     <h5 id='totalUsers'>Total Users: </h5>
     <h1>Socket test</h1>
     <div class='form'>
@@ -66,9 +67,9 @@
         socket.on('chat msg', (msg) => {
             var li = document.createElement('ul');
             li.innerHTML = msg;
-            // li.style.backgroundColor = '#a2b321';
             li.style.border = '1px solid black';
             li.style.margin = '5px 0';
+            li.style.width = 'max-content';
             li.style.padding = '5px';
             li.style.borderRadius = '5px';
             ul.appendChild(li)
@@ -77,6 +78,19 @@
         socket.on('totalUsers', (count) => {
             var tu = document.querySelector('#totalUsers');
             tu.innerHTML = 'Total Users: ' + count;
+        })
+        const connection_status = document.querySelector('#con');
+        connection_status.style.padding = '5px';
+        connection_status.style.color = 'white';
+        socket.on('connect',() => {
+            connection_status.innerHTML = 'Connected';
+            connection_status.style.backgroundColor = 'green';
+            console.log('connected to server');
+        })
+        socket.on('disconnect',() => {
+            connection_status.innerHTML = 'Disconnected';
+            connection_status.style.backgroundColor = 'red';
+            console.log('disconnected from server');
         })
         
    </script>

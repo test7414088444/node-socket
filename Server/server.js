@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express')
 const socketio = require('socket.io')
 const http = require('http')
@@ -10,17 +11,18 @@ app.use(express.static(require('path').join(__dirname, '..' ,'public')))
 const io = socketio(server);
 var count = 0;
 
+
 io.on('connection', function(socket) {
     count++;
     console.log('A user connected');
-    console.log(socket.id);
+    // console.log(socket.id);
     io.emit('totalUsers', count)
 
    socket.on('chat msg', (msg) => {
        console.log(msg)
        io.emit('chat msg', msg);
    })
-   //Whenever someone disconnects this piece of code executed
+   
    socket.on('disconnect', function () {
     count--;
     io.emit('totalUsers', count)
@@ -28,6 +30,6 @@ io.on('connection', function(socket) {
    });
 });
 
-server.listen(3000, () => {
-    console.log('app is running at http://localhost:3000')
+server.listen(process.env.PORT, () => {
+    console.log(`'app is running at http://localhost:${process.env.PORT}`)
 })

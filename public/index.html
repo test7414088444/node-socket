@@ -1,0 +1,83 @@
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>socket test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type="text/css">
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .form, h1 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        height: 100px;
+    }
+    button {
+        padding: 5px;
+    }
+    #input {
+        border-radius: 5px;
+        padding: 5px 5px;
+    }
+    .chat {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30%;
+        border: 1px solid black;
+        padding: 10px;
+    }
+    .chat ul li {
+        list-style-type: none;        
+    }
+    </style>
+  </head>
+  <body>
+    <h5 id='totalUsers'>Total Users: </h5>
+    <h1>Socket test</h1>
+    <div class='form'>
+        <input type='text' id='input' placeholder='Enter Something' />
+        <button>Add to list</button>
+    </div>
+    <div class='chat'>
+       <ul>
+       </ul>
+    </div>
+  </body>
+  <script src = "/socket.io/socket.io.js"></script>
+   
+   <script>
+        var ul = document.querySelector('ul');
+        const sendMessage = () => {
+            if(input.value.trim() !== '') {
+                socket.emit('chat msg', input.value)                
+                input.value = '';
+            }
+        }
+        var socket = io();
+        var input = document.querySelector('#input');
+        var btn = document.querySelector('button');
+        btn.addEventListener('click', sendMessage)
+
+        socket.on('chat msg', (msg) => {
+            var li = document.createElement('ul');
+            li.innerHTML = msg;
+            // li.style.backgroundColor = '#a2b321';
+            li.style.border = '1px solid black';
+            li.style.margin = '5px 0';
+            li.style.padding = '5px';
+            li.style.borderRadius = '5px';
+            ul.appendChild(li)
+        })
+
+        socket.on('totalUsers', (count) => {
+            var tu = document.querySelector('#totalUsers');
+            tu.innerHTML = 'Total Users: ' + count;
+        })
+        
+   </script>
+</html>
